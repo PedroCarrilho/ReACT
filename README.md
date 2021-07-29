@@ -1,6 +1,6 @@
 
-# ReACT with massive neutrinos
-## This branch is a first implementation of massive neutrinos (1909.02561) into the basic ReACT code. 
+# ReACT with interacting dark energy 
+## This branch extends 2105.12114 to include a momentum transfer between dark energy and dark matter as described in 1412.1080 
 
 ## Introduction
 
@@ -77,7 +77,6 @@ the `SpecialFunction.cpp` file in the `reactions/src` directory. Towards the top
 find the background Hubble and mu, gamma2, gamma3 functions as well as the modified spherical collapse function `F`.
 As examples, the Hu Sawicki, nDGP and GR versions of these functions have been included. wCDM background Hubble rates have also been included as presets. Simply edit in your version of these functions and edit-out the unwanted ones. Then just re-install the package as described above. Note that you may need to run `make clean` in the pyreact or reactions directory before reinstalling. 
 
-
 ### Adding in models
 
 One can add in new models. As a default, a maximum of 3 theory parameters have been allowed for. 
@@ -129,6 +128,14 @@ If these flags are not specified, ReACT will assume a LCDM, z=0 transfer is bein
 
 **Note** Pyreact currently only accepts two model parameters. If you wish to upgrade to more input parameters, you will need to edit pyreact/react_wrapper.cpp and pyreact/react.py. Note that to keep the react cosmosis module functional, you will also need to make the relevant adjustments in the cosmosis folder. 
 
+
+## 29/07/2021: Interacting dark energy. What's new: 
+
+Models 4 (quintessence) and 5 (CPL) assume an interaction in the dark sector with coupling given by the 3rd input parameter (vars[4] in ide.cpp corresponds to xi * h - see eq.13 of 1412.1080). 
+
+This has been implemented through a modification in the modified spherical collapse (f_modscol in reactions/src/SCOL.cpp) and modified linear perturbation equations (funcn_lin in reactions/src/SpecialFunctions.cpp). 
+
+
 ## Citation
 
 When using ReACT in a publication, please acknowledge the code by citing the following papers:
@@ -136,6 +143,8 @@ When using ReACT in a publication, please acknowledge the code by citing the fol
 arXiv:1812.05594 : "On the road to percent accuracy: non-linear reaction of the matter power spectrum to dark energy and modified gravity"
 
 arXiv:2005.12184 : "On the road to per-cent accuracy IV:  ReACT -- computing the non-linear power spectrum beyond LCDM"
+
+arXiv:2105.12114 : "On the road to percent accuracy V: the non-linear power spectrum beyond \LambdaΛCDM with massive neutrinos and baryonic feedback"
 
 Respective bibtex entries:
 
