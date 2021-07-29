@@ -1,0 +1,103 @@
+(* Content-type: application/mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 7.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       145,          7]
+NotebookDataLength[      3408,         95]
+NotebookOptionsPosition[      2792,         76]
+NotebookOutlinePosition[      3225,         93]
+CellTagsIndexPosition[      3182,         90]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[
+ RowBox[{"SetDirectory", "[", 
+  RowBox[{"NotebookDirectory", "[", "]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.7326660794172907`*^9, 3.7326661184757137`*^9}},
+ CellLabel->"In[7]:=",ExpressionUUID->"51addf5b-4e52-48e1-aaf0-65e344f733ef"],
+
+Cell[BoxData["\<\"/Users/bbose/Desktop/IDE_NL/reactions/examples/transfers/DS\
+\"\>"], "Output",
+ CellChangeTimes->{3.732667278931164*^9, 3.836271805441289*^9},
+ CellLabel->"Out[7]=",ExpressionUUID->"bebe13f8-39cb-475a-bc7b-29a1fdf6bb7e"]
+}, Open  ]],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"extract", "=", 
+   RowBox[{"Import", "[", 
+    RowBox[{"\"\<wcdm_1.1_transfer_1.dat\>\"", ",", 
+     RowBox[{"{", 
+      RowBox[{"\"\<Data\>\"", ",", "All", ",", "1"}], "}"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"extract2", "=", 
+   RowBox[{"Import", "[", 
+    RowBox[{"\"\<wcdm_1.1_transfer_1.dat\>\"", ",", 
+     RowBox[{"{", 
+      RowBox[{"\"\<Data\>\"", ",", "All", ",", "7"}], "}"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"extract3", "=", 
+    RowBox[{"TableForm", "[", 
+     RowBox[{"Transpose", "[", 
+      RowBox[{"{", 
+       RowBox[{"extract", ",", 
+        RowBox[{"extract2", "/", 
+         RowBox[{"(", 
+          RowBox[{"extract2", "[", 
+           RowBox[{"[", "1", "]"}], "]"}], ")"}]}]}], "}"}], "]"}], "]"}]}], 
+   ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Export", "[", 
+   RowBox[{"\"\<transfer_wcdm_11.dat\>\"", ",", "extract3"}], "]"}], 
+  ";"}]}], "Input",
+ CellChangeTimes->{{3.732666123518303*^9, 3.7326661562060966`*^9}, {
+  3.732667229988368*^9, 3.732667250904306*^9}, {3.732667310192518*^9, 
+  3.732667310765655*^9}, {3.732667363310615*^9, 3.7326673661006937`*^9}, {
+  3.7326676427788887`*^9, 3.7326676772849407`*^9}, {3.732667711483521*^9, 
+  3.7326677117230253`*^9}, {3.7326677476252527`*^9, 3.732667748919055*^9}, {
+  3.732667867034031*^9, 3.732667867248007*^9}, {3.732669757979971*^9, 
+  3.732669759792673*^9}, {3.8362718147378483`*^9, 3.836271835614399*^9}, {
+  3.836273374316875*^9, 3.8362733870741997`*^9}, {3.836273417932556*^9, 
+  3.8362734218445187`*^9}},
+ CellLabel->"In[24]:=",ExpressionUUID->"767af948-5ce0-4e09-92af-ea730e3ac48f"]
+},
+WindowSize->{848, 277},
+WindowMargins->{{162, Automatic}, {169, Automatic}},
+PrivateNotebookOptions->{"VersionedStylesheet"->{"Default.nb"[8.] -> True}},
+FrontEndVersion->"11.3 for Mac OS X x86 (32-bit, 64-bit Kernel) (March 5, \
+2018)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[567, 22, 252, 4, 31, "Input",ExpressionUUID->"51addf5b-4e52-48e1-aaf0-65e344f733ef"],
+Cell[822, 28, 238, 3, 31, "Output",ExpressionUUID->"bebe13f8-39cb-475a-bc7b-29a1fdf6bb7e"]
+}, Open  ]],
+Cell[1075, 34, 1713, 40, 108, "Input",ExpressionUUID->"767af948-5ce0-4e09-92af-ea730e3ac48f"]
+}
+]
+*)
+

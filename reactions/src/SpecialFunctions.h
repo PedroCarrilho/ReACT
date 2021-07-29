@@ -158,9 +158,10 @@ double WEFF(double a, double omega0, double p1, double p2, double p3, int model 
 double mu(double a, double k0, double omega0, double p1, double p2, double p3, int model = 1  );
 double gamma2(double a, double omega0, double k0, double k1, double k2, double u1, double p1, double p2, double p3 , int model = 1 );
 double gamma3(double a, double omega0, double k0, double k1, double k2, double k3, double u1,double u2, double u3, double p1, double p2, double p3, int model = 1 );
-// spherical collapse (1812.05594 - appendix)
+// spherical collapse modified poisson function (1812.05594 - appendix)
 double mymgF(double a, double yh, double yenv, double Rth, double omega0, double p1, double p2, double p3, double delta_initial, int model = 1);
-
+// friction term in Dark scattering model (https://arxiv.org/pdf/1412.1080.pdf)
+double myfricF(double a, double omega0, double p1, double p2, double p3, int model);
 
 // standard PT kernels
 double alpha(double k1, double k2, double u1);

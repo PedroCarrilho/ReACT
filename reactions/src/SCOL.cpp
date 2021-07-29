@@ -60,7 +60,7 @@ static double Pzeta(double x, void * p)
 // derivatives are taken with respect to t (or ln[a])
 static int f_modscol(realtype t, N_Vector y, N_Vector ydot, void *user_data)
 {
-    realtype y1, y2, ET, ET0, yenv, Fvir, hubble2, dhlnaoh, prefac, term1, term2, term4, IC, Rth, OM, OCB, T1, maxt;
+    realtype y1, y2, ET, ET0, yenv, Fvir, hubble, hubble2, dhlnaoh, prefac, term1, term2, term4, term5, IC, Rth, OM, OCB, T1, maxt;
     UserData data;
 
     data    = (UserData) user_data;
@@ -90,23 +90,29 @@ static int f_modscol(realtype t, N_Vector y, N_Vector ydot, void *user_data)
     double myenv = (yenv + ET)/ET;
 
     Fvir = mymgF(ET*ET0, myh, myenv, Rth, OM, (data->par1),(data->par2),(data->par3), IC, (data->mymodel));
+    // (H/H0)
+    hubble = HAg(ET*ET0, OM, (data->par1), (data->par2), (data->par3),(data->mymodel));
     // (H/H0)^2
-    hubble2 = pow2(HAg(ET*ET0, OM, (data->par1), (data->par2), (data->par3),(data->mymodel)));
+    hubble2 = pow2(hubble);
     // d H/ d ln[a] /H
     dhlnaoh = HA1g(ET*ET0,OM, (data->par1), (data->par2), (data->par3),(data->mymodel))/hubble2;
 
     prefac  =  SUNRexp(-THREE*t)*OCB; // a^3 Omega_cb
 
     term1   = -dhlnaoh*y2;
-    term2   = (1.+dhlnaoh)*y1;
+    term2   =  (1.+dhlnaoh)*y1;
 
     term4   = -prefac*(ET+y1)*(
                                 (IC+ONE)/(y1/ET + ONE)/(y1/ET + ONE)/(y1/ET + ONE) - ONE
                             ) *(Fvir + ONE)
             /hubble2*HALF;  // RHS of Eq. A4
 
+    double fric =  myfricF(ET*ET0, OM, (data->par1),(data->par2),(data->par3), (data->mymodel)) / hubble;
+
+    term5  =  - fric * (y2 - y1) ; // IDE term
+
     Ith(ydot,1) = y2; // y' = y2
-    Ith(ydot,2) = term4 + term2 + term1; // y'' = RHS
+    Ith(ydot,2) = term1 + term2 + term4 + term5; // y'' = RHS
     return(0);
 }
 

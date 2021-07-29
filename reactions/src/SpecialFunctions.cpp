@@ -390,6 +390,36 @@ double mymgF(double a, double yh, double yenv, double Rth, double omega0, double
   }
 }
 
+double myfricF(double a, double omega0, double p1, double p2, double p3, int model){
+	double deexponent,omegaf, omegaL;
+	switch(model) {
+		case 1:
+						return  0. ; // GR
+		case 2:
+						return  0. ; // f(R)
+		case 3:
+						return  0. ; // DGP
+		case 4:
+		// dark scattering model friction term -Quintessence background
+		 				deexponent = -3.*(1.+p1);
+		 				omegaf = pow(a,deexponent);
+		 				omegaL= (1.-omega0)*omegaf;
+						return  (1.+ p1) * omegaL * p3 * 0.0974655;
+						// = (1+w_0) * Omega_L * p3 * 3 H / (8 \pi G) * unit conversion (p3 = xi * h ) : Omega_L = Omega_L,0 * H_0^2 / H^2 * evolution
+		case 5:
+		// dark scattering model friction term - CPL background
+		 				deexponent = -3.*(1.+p1+p2);
+		 				omegaf = pow(a,deexponent)*exp(3.*(-1.+a)*p2);
+		 				omegaL= (1.-omega0)*omegaf;
+						return  (1.+ (p1+(1.-a)*p2)) * omegaL * p3 * 0.0974655;
+						// = (1+w(a)) * Omega_L * p3 * 3 H / (8 \pi G) * unit conversion (p3 = xi * h ) : Omega_L = Omega_L,0 * H_0^2 / H^2 * evolution
+	  case 6:
+						return 0.; // HYP background - work in progress
+		default:
+					warning("SpecialFunctions: invalid model choice, model = %d \n", model);
+				  return 0;
+  }
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////
@@ -995,10 +1025,13 @@ int funcn_lin(double a, const double G[], double F[], void *params)
 	double hade1 = HA2g(a,omega0,p1,p2,p3,mod);
 	double hade2 = HA2g2(a,omega0,p1,p2,p3,mod);
 
+	// dark scattering model friction term - only used in CPL and Quintessence
+	double fric = myfricF(a, omega0, p1, p2, p3, mod)/ HAg(a,omega0,p1,p2,p3,mod);
+
 	/* 1st order */
 	//1. F1/G1(k)
 	F[0] = -G[1]/a;
-	F[1] =1./a*(-(2.-hade1)*G[1]-hade2*G[0]*mu(a,k1,omega0,p1,p2,p3,mod));
+	F[1] =1./a*(-(2.+ fric -hade1)*G[1]-hade2*G[0]*mu(a,k1,omega0,p1,p2,p3,mod));
 
 	return GSL_SUCCESS;
 }
@@ -1242,12 +1275,14 @@ int funcn2(double a, const double G[], double F[], void *params)
 
 	double omegacb = omega0-omeganu;
 
+
 	double hub1 = pow2(HAg(a,omega0,p1,p2,p3,mod));
 	double hub2 = HA1g(a,omega0,p1,p2,p3,mod);
 	double ap5 = pow(a,5);
 
+
 	F[0] = G[1];
-	F[1] = -1./a*(3.+hub2/hub1)*G[1] + 3./2.*omegacb/(hub1*ap5)*G[0];
+	F[1] = -1./a*(3.+ hub2/hub1)*G[1] + 3./2.*omegacb/(hub1*ap5)*G[0];
 
 	return GSL_SUCCESS;
 }
@@ -1314,6 +1349,7 @@ void IOW::initnorm(double vars[], int model) //double A, double omega0, double p
 
 			// correction to virial concentration and P(k)
 					g_de = dnorm_spt1/dnorm_spt;
+
 }
 
 
