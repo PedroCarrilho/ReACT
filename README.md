@@ -144,7 +144,7 @@ arXiv:1812.05594 : "On the road to percent accuracy: non-linear reaction of the 
 
 arXiv:2005.12184 : "On the road to per-cent accuracy IV:  ReACT -- computing the non-linear power spectrum beyond LCDM"
 
-arXiv:2105.12114 : "On the road to percent accuracy V: the non-linear power spectrum beyond \LambdaΛCDM with massive neutrinos and baryonic feedback"
+arXiv:2105.12114 : "On the road to percent accuracy V: the non-linear power spectrum beyond LCDM with massive neutrinos and baryonic feedback"
 
 Respective bibtex entries:
 
