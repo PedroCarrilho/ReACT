@@ -1348,7 +1348,26 @@ void IOW::initnorm(double vars[], int model) //double A, double omega0, double p
 					gsl_odeiv2_driver_free(d2);
 
 			// correction to virial concentration and P(k)
+				if (vars[4] == 0.) {
 					g_de = dnorm_spt1/dnorm_spt;
+				}
+				else{
+						//reset
+						a = 3e-5;
+				  	G1[0] = a;
+						G1[1] = -a;
+						// wCDM + xi growth @ a=1 for Omega_cb
+						struct param_type3 myparams3 = {1.,1.,1.,1.,1.,1.,vars[1], vars[2], vars[3], vars[4] ,1,1.,1.,1., 0., model};
+						gsl_odeiv2_system sys3 = {funcn_lin, jac, 2, &myparams3};
+						gsl_odeiv2_driver * d3 = gsl_odeiv2_driver_alloc_y_new (&sys3, gsl_odeiv2_step_rk8pd,
+											 1e-4, 1e-4, 1e-4);
+
+											 int status3 = gsl_odeiv2_driver_apply (d3, &a, 1., G1);
+
+					/*Allocation of array values */
+					double dnorm_spt_ide  = G1[0] ;
+					g_de = dnorm_spt1/dnorm_spt_ide;
+				}
 
 }
 
