@@ -688,6 +688,12 @@ double SCOL::myscol(double myscolparams[], double acol, double omegacb, double o
        double wn =  prefac*(1.+mydelt);
         // modified gravity, dark energy  and Kinetic energy contributions
        double wphi, weff, ke;
+
+       double fric=0;
+       double powCPL = -3*(1+p1+p2);
+       double omegaf = pow(ai,powCPL)*exp(3.*(-1.+ai)*p2);
+       double omegaL= (1.-omega0)*omegaf;
+
        if(model==1){
          wphi = 0.;
          weff = 2.*(1.-omega0)*pow2(myy/arat);
@@ -697,12 +703,14 @@ double SCOL::myscol(double myscolparams[], double acol, double omegacb, double o
          wphi = prefac * mymgF(ai, myy, myyenv, Rthp, omegacb, p1, p2, p3, myscolparams[0],model)*mydelt;
          weff = WEFF(ai,omegacb,p1,p2,p3,model)*pow2(myy/arat);
          ke =  pow2(HAg(ai, omega0,p1,p2,p3,model)*(myy + myp)/arat); // might need to change to cb TO CHECK
+         fric = (1.+(p1+(1.-ai)*p2))*omegaL*p3/HAg(ai, omega0,p1,p2,p3,model)*0.0974655;
        }
 
 
         // RHS of virial theorem
        (*myen).xx[i] = ai;
-       (*myen).yy[i] = 2.*ke + wn + wphi + weff;
+       //(*myen).yy[i] = 2.*ke + wn + wphi + weff;
+       (*myen).yy[i] = 2.*ke*(1.-fric*myy*myp/pow2(myy + myp)) + wn + wphi + weff;
 
         // used in solver for amax just below to get 2nd root of virial theorem (sets lower bound for solve search )
        (*myamax).xx[i] = ai;
