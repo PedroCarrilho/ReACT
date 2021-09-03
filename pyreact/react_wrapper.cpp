@@ -54,7 +54,7 @@ extern "C" {
                          int* N_z, double* zvals,
                          bool* is_transfer,
                          double* h, double* n_s, double* Omega_m, double* Omega_b, double* sigma_8,
-                         double* mg1, double* mg2, int* mass_loop, int* model,
+                         double* mg1, double* mg2, double* mg3, int* mass_loop, int* model,
                          int* N_k_react, int* N_z_react, double* output_react,
                          int* N_k_pl, int* N_z_pl, double* output_pl,
                          double* modsig8,
@@ -92,10 +92,11 @@ extern "C" {
             std::cout<<"Omega_m: " << *Omega_m << "\n";
             std::cout<<"Omega_b: " << *Omega_b << "\n";
             std::cout<<"sigma_8: " << *sigma_8 << "\n";
-            std::cout<<"mg1: " << *mg1 << "\n";
-            std::cout<<"mg2: " << *mg2 << "\n";
+            std::cout<<"mg1: " << *mg1 << "\n";    // w_de    wCDM
+            std::cout<<"mg2: " << *mg2 << "\n";    // w_a     CPL
+            std::cout<<"mg3: " << *mg3 << "\n";    // \xi     IDE term
             std::cout<<"mass loop: " << *mass_loop << "\n";
-            std::cout<<"model: "  << *model << " (1:GR, 2:f(R), 3:DGP, 4:quintessence, 5: CPL)\n";
+            std::cout<<"model: "  << *model << " (1:GR, 2:f(R), 3:DGP, 4:quintessence with interaction, 5:CPL with interaction)\n";
 
         }
 
@@ -146,7 +147,7 @@ extern "C" {
         vars[1] = *Omega_m;
         vars[2] = *mg1;
         vars[3] = *mg2;
-        vars[4] = 1.;
+        vars[4] = (*mg3)*(*h);
         vars[5] = *mass_loop;
         vars[6] = 0.0; // massive neutrino mass sum, not implemented in pyreact yet!
 

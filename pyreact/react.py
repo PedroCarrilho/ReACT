@@ -38,7 +38,7 @@ class ReACT:
 
     def compute_reaction(self, h, n_s, omega_m, omega_b, sigma_8,
                                z, k, Pk,
-                               model="f(r)", fR0=None, Omega_rc=None, w=None, wa=None,
+                               model="f(r)", fR0=None, Omega_rc=None, w=None, wa=None, xi=None,
                                is_transfer=False, mass_loop=30,
                                verbose=True):
 
@@ -52,22 +52,27 @@ class ReACT:
             reaction_model = 2
             modified_gravity_param = fR0
             modified_gravity_param2 = 0.0
+            modified_gravity_param3 = 0.0
         elif model.lower() == "dgp":
             reaction_model = 3
             modified_gravity_param = Omega_rc
             modified_gravity_param2 = 0.0
+            modified_gravity_param3 = 0.0
         elif model.lower() == "gr":
             reaction_model = 1
             modified_gravity_param = 0.0
             modified_gravity_param2 = 0.0
-        elif model.lower() == "quintessence":
+            modified_gravity_param3 = 0.0
+        elif model.lower() == "quintessence with interaction":
             reaction_model = 4
             modified_gravity_param = w
             modified_gravity_param2 = 0.0
-        elif model.lower() == "cpl":
+            modified_gravity_param3 = xi
+        elif model.lower() == "cpl with interaction":
             reaction_model = 5
             modified_gravity_param = w
             modified_gravity_param2 = wa
+            modified_gravity_param3 = xi
         else:
             raise ValueError(f"model '{model}' not supported.")
 
@@ -87,8 +92,9 @@ class ReACT:
                       ct.POINTER(ct.c_double),     # sigma_8
                       ct.POINTER(ct.c_double),     # model parameter 1 : for f(R) this is fr0, for dgp this is Omega_rc, for CPL or quintessence this is w0
                       ct.POINTER(ct.c_double),     # model parameter 2 : for CPL this is wa
+                      ct.POINTER(ct.c_double),     # model parameter 3 : for IDE this is xi
                       ct.POINTER(ct.c_int),        # mass_loop
-                      ct.POINTER(ct.c_int),        # model (1: GR, 2: f(R), 3; DGP, 4: quintessence, 5: CPL)
+                      ct.POINTER(ct.c_int),        # model (1: GR, 2: f(R), 3; DGP, 4: quintessence with interaction, 5:CPL with interaction)
                       *array_ctype(ndim=2, dtype=np.float64), # reaction (output)
                       *array_ctype(ndim=2, dtype=np.float64), # linear MG power spectrum (output)
                       np.ctypeslib.ndpointer(ndim=1, dtype=np.float64, flags="C"),     # modified sigma_8 storage variable
@@ -105,6 +111,7 @@ class ReACT:
                 ct.c_double(h), ct.c_double(n_s), ct.c_double(omega_m), ct.c_double(omega_b), ct.c_double(sigma_8),
                 ct.c_double(modified_gravity_param),
                 ct.c_double(modified_gravity_param2),
+                ct.c_double(modified_gravity_param3),
                 ct.c_int(mass_loop),
                 ct.c_int(reaction_model),
                 *array_arg(reaction),
