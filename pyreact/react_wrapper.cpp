@@ -135,6 +135,7 @@ extern "C" {
         HALO halo(C, P_l, P_l, P_l, P_l, epsrel);
         SPT spt(C, P_l, epsrel);
         IOW iow;
+        
 
         /* array set up for 1-loop spt splining over z and reaction splining over k */
         int loop_nk = 60;
@@ -154,6 +155,14 @@ extern "C" {
         int mod = *model;
         // initialise power spectrum normalisation before running 1-loop computations
         iow.initnorm(vars,mod);
+        
+        bool modg; 
+        if(mod ==1 || mod >3){
+            modg = false;
+        }
+        else{
+            modg = true;
+            }
 
         // initialise splines over redshift for real and pseudo 1-loop spectra @ k0 = 0.06h/Mpc
         double k0 = 0.06;
@@ -197,7 +206,7 @@ extern "C" {
             }
 
             // initialise k_star and mathcal{E}
-            halo.react_init2(vars,mysr,mysp);
+            halo.react_init2(vars,mysr,mysp,modg);
 
             // reaction
             //#pragma omp parallel for
