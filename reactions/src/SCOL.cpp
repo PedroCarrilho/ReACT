@@ -200,13 +200,14 @@ double SCOL::maxP_zeta(double sig2, double dsig2dR, double OM, double Z)
   T = gsl_min_fminimizer_brent;
   s = gsl_min_fminimizer_alloc (T);
 
-  gsl_set_error_handler_off();
-  status2 = gsl_min_fminimizer_set (s, &F, m, a, b);
-  if (status2 ){
-    printf ("error: %s\n", gsl_strerror (status2));
-    printf ("The offending values of sigma8, sigma8', z, omega_m, varomega, d_envcr, beta, Dl_spt, g_de : %e %e %e %e %e %e %e %e %e  \n", sig2, dsig2dR, Z, OM,varomega, d_envcr, betatest, Dl_spt, g_de );
-  }
- gsl_set_error_handler (NULL);
+ gsl_set_error_handler_off();
+ status2 = gsl_min_fminimizer_set (s, &F, m, a, b);
+ if (status2 ){
+   fprintf(stderr, "error: %s\n", gsl_strerror (status2));
+   fprintf(stderr, "The offending values of sigma8, sigma8', z, omega_m, varomega, d_envcr, beta, Dl_spt, g_de : %e %e %e %e %e %e %e %e %e  \n", sig2, dsig2dR, Z, OM,varomega, d_envcr, betatest, Dl_spt, g_de );
+   error.errorno = status2;
+ }
+gsl_set_error_handler (NULL);
 
   do
     {
@@ -689,31 +690,24 @@ double SCOL::myscol(double myscolparams[], double acol, double omegacb, double o
         // modified gravity, dark energy  and Kinetic energy contributions
        double wphi, weff, ke, wds;
 
-       double fric=0;
-       double powCPL = -3*(1+p1+p2);
-       double omegaf = pow(ai,powCPL)*exp(3.*(-1.+ai)*p2);
-       double omegaL= (1.-omega0)*omegaf;
-
        if(model==1){
          wphi = 0.;
          weff = 2.*(1.-omega0)*pow2(myy/arat);
          ke =  pow2(HA(ai, omega0)*(myy + myp)/arat);
-	 //wds = 0.;
+         wds = 0.;
        }
        else{
-         wphi = prefac * mymgF(ai, myy, myyenv, Rthp, omegacb, p1, p2, p3, myscolparams[0],model)*mydelt;
-         weff = WEFF(ai,omegacb,p1,p2,p3,model)*pow2(myy/arat);
+         wphi = prefac * mymgF(ai, myy, myyenv, Rthp, omegacb, p1, p2, p3, myscolparams[0],model)*mydelt;// Not sure this is omegacb
+         weff = WEFF(ai,omega0,p1,p2,p3,model)*pow2(myy/arat); // This was omegacb, but I think it should not be
          ke =  pow2(HAg(ai, omega0,p1,p2,p3,model)*(myy + myp)/arat); // might need to change to cb TO CHECK
-	 //wds = -2.*myfricF(ai,omegacb,p1,p2,p3,model)*pow2(HA(ai, omega0)/arat)*myy*myp;  // Pedro's derivation
-         fric = (1.+(p1+(1.-ai)*p2))*omegaL*p3/HAg(ai, omega0,p1,p2,p3,model)*0.0974655;
+         wds = - 2.*myfricF(ai,omega0,p1,p2,p3,model)*HAg(ai, omega0,p1,p2,p3,model)*pow2(1.0/arat)*myy*myp;
        }
 
 
         // RHS of virial theorem
        (*myen).xx[i] = ai;
-       //(*myen).yy[i] = 2.*ke + wn + wphi + weff;
-       //(*myen).yy[i] = 2.*ke + wn + wphi + weff + wds;
-       (*myen).yy[i] = 2.*ke*(1.-fric*myy*myp/pow2(myy + myp)) + wn + wphi + weff;
+
+       (*myen).yy[i] = 2.*ke + wn + wphi + weff + wds;
 
         // used in solver for amax just below to get 2nd root of virial theorem (sets lower bound for solve search )
        (*myamax).xx[i] = ai;

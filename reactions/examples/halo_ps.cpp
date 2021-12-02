@@ -27,7 +27,6 @@ using std::ifstream;
 using std::string;
 using std::istringstream;
 
-vector<vector<double> > mypk;
 
 /* Example code to output the halo model powerspectrum for modified gravity */
 
@@ -45,7 +44,7 @@ int main(int argc, char* argv[]) {
     const char* output = "ps_f5_z0.dat";
     const char* cstr = "transfers/Matteo_fr";
 // 0: scale factor, 1: omega_total, 2-4: mg param (1e-10 ~ GR for default mg functions ), 5: number of points in halo-mass loop in scol_init , 30 works well.
-double vars[7];
+double vars[8];
 
   // chosen redshift
     double myz = 0.;
@@ -84,7 +83,7 @@ iow.initnorm(vars,mymodel);
 /// initialise delta_c(M), a_vir(M), delta_avir(M) and v(M)
 halo.scol_init(vars,mgcamb,mymodel);
 halo.scol_initp(vars,mgcamb,mymodel);
-halo.react_init(vars,modg,mymodel);
+halo.react_init_nu(vars,mgcamb,modg,mymodel);
 
 //#pragma omp parallel for
 int Nk =100;
@@ -93,11 +92,11 @@ double kmax = 10.;
 
  for(int i =0; i < Nk;  i ++) {
 
-  real k =  mypk[i][0];//kmin * exp(i*log(kmax/kmin)/(Nk-1));
+  real k = kmin * exp(i*log(kmax/kmin)/(Nk-1));
 
       p1 =  halo.one_halo(k, vars);
       p2 =  halo.one_halop(k, vars);
-      p3 =  halo.reaction(k, vars);
+      p3 =  halo.reaction_nu(k, vars, mgcamb);
 
      printf("%d %e %e %e %e \n", i, k, p1,p2,p3); // print to terminal
      fprintf(fp,"%e %e %e %e \n", k, p1,p2, p3); // print to file

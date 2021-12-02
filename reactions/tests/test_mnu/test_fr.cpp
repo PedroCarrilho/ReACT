@@ -110,7 +110,7 @@ double As = 2.199e-9; // initial amplitude of fluctuations
 double massb = 50.; // number of mass bins between 5<Log10[M]<18
 
 // store params for passing into React functions
-double vars[7];
+double vars[8];
     vars[0] = 1./(myz+1.); //  scale factor
     vars[1] = Omega_m;
     vars[2] = mg; //  modified gravity param
@@ -183,7 +183,7 @@ double p1,p2,p3;
       real k = mypk[i][0];
 
       p1 = P_l(k)/mypk[i][1];
-      p2 = halo.reaction_nu(k,vars)/mypk[i][3]; ;
+      p2 = halo.reaction_nu(k,vars,mgcamb)/mypk[i][3]; ;
       p3 = halo.PHALO_pseudo(k,mgcamb)/mypk[i][4];
 
       if(fabs(p1-1.)>0.01 || fabs(p2-1.)>0.01 || fabs(p3-1.)>0.01){

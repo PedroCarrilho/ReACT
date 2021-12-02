@@ -125,12 +125,12 @@ double wa = 0.1;
 double massb = 50.;
 
 // store params for passing into React functions
-double vars[7];
+double vars[8];
     vars[0] = 1./(myz+1.); //  scale factor
     vars[1] = Omega_m;
     vars[2] = w0; //  modified gravity param or w0 (see SpecialFunctions.cpp)
     vars[3] = wa;  // extra, in the CPL case it is wa
-    vars[4] = 1.; // extra
+    vars[4] = 0.; // extra
     vars[5] = massb; // number of mass bins between 5<Log10[M]<18
     vars[6] = Omega_nu;
 
@@ -187,8 +187,8 @@ double kmax = 100.;
 
       real k = kmin* exp(i*log(kmax/kmin)/(Nk-1));
 
-      p1 = P_l(k); // Linear spectrum 
-      p2 = halo.reaction_nu(k,vars); // halo model reaction 
+      p1 = P_l(k); // Linear spectrum
+      p2 = halo.reaction_nu(k,vars, mgcamb); // halo model reaction
       p3 = halo.PHALO_pseudo(k,mgcamb); // halofit pseudo spectrum
 
       printf("%e %e %e %e %e  \n", k, p1,p2, p3,p3*p2); // output to terminal
