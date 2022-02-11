@@ -169,14 +169,6 @@ extern "C" {
         // initialise power spectrum normalisation before running 1-loop computations
         iow.initnorm(vars,mod);
 
-        bool modg;
-        if(mod ==1 || mod >3){
-            modg = false;
-        }
-        else{
-            modg = true;
-            }
-
         // initialise splines over redshift for real and pseudo 1-loop spectra @ k0 = 0.06h/Mpc
         double k0 = 0.06;
         for(int i=0; i<*N_z; i++) {
@@ -245,7 +237,7 @@ extern "C" {
 
             for(int i =0; i < *N_k;  i ++) {
                 output_react[i*(*N_z)+j] =  myreact(kvals[i]);
-                output_pl[i*(*N_z)+j] = pow2(halo.Lin_Grow(kvals[i]))*P_l(kvals[i]);
+                output_pl[i*(*N_z)+j] = pow2(halo.Lin_Grow(kvals[i]))*powerspectrum[i];
                 if(*verbose > 1) {
                     printf(" %e %e %e \n",zvals[j], kvals[i],halo.plinear_cosmosis(kvals[i]));
                 }

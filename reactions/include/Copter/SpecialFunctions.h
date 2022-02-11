@@ -134,7 +134,7 @@ public:
     void initnorm(double vars[], int model = 1); // wCDM and LCDM power spectrum normalisation  - roughly the same as above function but with no MG and with dark energy. It solves at a=1 to normalise general spectrum as well solves with LCDM at given a
     void initn2(double A, double k[], double x[], double kargs[], double omega0, double par1, double par2, double par3, double omeganu, int model = 1 ); // 1-loop kernel solver
     void initn2_pseudo(double A, double k[], double x[], double kargs[], double omega0, double par1, double par2, double par3, double omeganu, int model = 1 ); // 1-loop pseudo spectrum kernel solver
-    void initn3(double redshifts[], int noz, double k[], double x[], double kargs[], double omega0, double par1, double par2, double par3, double mykernelarray[][20], int model = 1 ); // 1-loop kernel (real and pseudo) solver for array of redshifts -- used in reaction for lensing
+    void initn3(double redshifts[], int noz, double k[], double x[], double kargs[], double omega0, double par1, double par2, double par3, double mykernelarray[][20], double omeganu = 0. , int model = 1 ); // 1-loop kernel (real and pseudo) solver for array of redshifts -- used in reaction for lensing
     void initn_rsd(double A, double k[], double x[], double kargs[], double omega0, double par1, double par2, double par3, int model = 1 ); // 1-loop TNS solver (also solves for ABC correction term kernels)
 
 };
@@ -158,9 +158,10 @@ double WEFF(double a, double omega0, double p1, double p2, double p3, int model 
 double mu(double a, double k0, double omega0, double p1, double p2, double p3, int model = 1  );
 double gamma2(double a, double omega0, double k0, double k1, double k2, double u1, double p1, double p2, double p3 , int model = 1 );
 double gamma3(double a, double omega0, double k0, double k1, double k2, double k3, double u1,double u2, double u3, double p1, double p2, double p3, int model = 1 );
-// spherical collapse (1812.05594 - appendix)
+// spherical collapse modified poisson function (1812.05594 - appendix)
 double mymgF(double a, double yh, double yenv, double Rth, double omega0, double p1, double p2, double p3, double delta_initial, int model = 1);
-
+// friction term in Dark scattering model (https://arxiv.org/pdf/1412.1080.pdf)
+double myfricF(double a, double omega0, double p1, double p2, double p3, int model);
 
 // standard PT kernels
 double alpha(double k1, double k2, double u1);
